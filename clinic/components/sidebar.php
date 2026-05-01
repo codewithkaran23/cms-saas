@@ -23,6 +23,7 @@ function get_lucide_svg($name, $class = "w-4 h-4 opacity-70") {
         'calendar-check' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="m9 16 2 2 4-4"/></svg>',
         'calendar-clock' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h5"/><path d="M17.5 17.5 16 16.3V14"/><circle cx="16" cy="16" r="6"/></svg>',
         'plus-circle' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>',
+        'file-plus' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="12" x2="12" y1="18" y2="12"/><line x1="9" x2="15" y1="15" y2="15"/></svg>',
     ];
     return str_replace('<svg ', '<svg class="' . $class . '" ', $icons[$name] ?? '');
 }
@@ -34,10 +35,10 @@ $nav_items = [
         'url' => 'patients.php',
         'icon' => 'users',
         'sub_items' => [
+            'add' => ['label' => 'Add Patient', 'url' => 'patient-add.php', 'icon' => 'plus-circle'],
             'list' => ['label' => 'Patient List', 'url' => 'patients.php', 'icon' => 'list'],
-            'profile' => ['label' => 'Profile', 'url' => '#', 'icon' => 'user'],
-            'history' => ['label' => 'Visit History', 'url' => '#', 'icon' => 'clock'],
-            'search' => ['label' => 'Search', 'url' => '#', 'icon' => 'search'],
+            'add-doc' => ['label' => 'Add Document', 'url' => 'patient-document-add.php', 'icon' => 'file-plus'],
+            'doc-list' => ['label' => 'Document List', 'url' => 'records.php', 'icon' => 'folder'],
         ]
     ],
     'Appointments' => [
@@ -81,22 +82,23 @@ function is_active($item, $current_page, $current_view) {
 <aside class="w-72 bg-[#1e293b] min-h-screen flex flex-col sticky top-0 h-screen z-50 text-slate-300 shadow-xl overflow-x-hidden no-flicker">
     <!-- Brand Area -->
     <div class="p-8 flex items-center gap-4 border-b border-slate-800/50">
-        <div class="w-10 h-10 rounded-lg flex items-center justify-center text-white shadow-lg" style="background-color: <?php echo $clinic['primary_color']; ?>;">
+        <div class="w-10 h-10 rounded-lg flex items-center justify-center text-white shadow-lg" style="background-color: <?php echo $clinic['primary_color'] ?? '#3b82f6'; ?>;">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
         </div>
         <div class="overflow-hidden">
-            <h1 class="text-lg font-bold text-white tracking-tight truncate leading-tight"><?php echo e($clinic['name']); ?></h1>
+            <h1 class="text-lg font-bold text-white tracking-tight truncate leading-tight"><?php echo e($clinic['name'] ?? 'MedOS'); ?></h1>
             <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">Admin Dashboard</p>
         </div>
     </div>
 
     <!-- Main Navigation -->
-    <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+    <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto custom-scrollbar">
         <?php foreach ($nav_items as $label => $data): ?>
             <?php 
                 $has_sub = isset($data['sub_items']);
                 $active = is_active($data, $current_page, $current_view);
-                $active_style = $active && !$has_sub ? "background-color: {$clinic['primary_color']};" : "";
+                $primary_color = $clinic['primary_color'] ?? '#3b82f6';
+                $active_style = $active && !$has_sub ? "background-color: $primary_color;" : "";
             ?>
             
             <div class="nav-group" x-data="{ open: <?php echo $active ? 'true' : 'false'; ?> }">
@@ -118,7 +120,7 @@ function is_active($item, $current_page, $current_view) {
                 <?php if ($has_sub): ?>
                     <div x-show="open" x-collapse x-cloak class="mt-1 space-y-1">
                         <?php foreach ($data['sub_items'] as $id => $sub): 
-                            $sub_active = (strpos($sub['url'], $current_page) !== false && (strpos($sub['url'], "view=$current_view") !== false || ($current_view === '' && $id === 'list' && $current_page === 'patients.php')));
+                            $sub_active = (strpos($sub['url'], $current_page) !== false);
                         ?>
                             <a href="<?php echo base_url('clinic/' . $sub['url']); ?>" 
                                class="flex items-center gap-3 px-12 py-2 text-xs font-semibold rounded-lg transition-colors <?php echo $sub_active ? 'bg-blue-600/20 text-blue-400' : 'text-slate-500 hover:text-slate-300'; ?>">
@@ -134,12 +136,13 @@ function is_active($item, $current_page, $current_view) {
 
     <!-- Others Section -->
     <div class="px-8 py-4 border-t border-slate-800/50">
-        <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Others</p>
+        <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">System</p>
         <div class="space-y-1 -mx-4">
             <?php foreach ($other_items as $label => $data): ?>
                 <?php 
                     $active = is_active($data, $current_page, $current_view);
-                    $active_style = $active ? "background-color: {$clinic['primary_color']};" : "";
+                    $primary_color = $clinic['primary_color'] ?? '#3b82f6';
+                    $active_style = $active ? "background-color: $primary_color;" : "";
                 ?>
                 <a href="<?php echo base_url('clinic/' . $data['url']); ?>" 
                    class="flex items-center gap-4 px-4 py-2.5 rounded-lg text-xs font-bold transition-all <?php echo $active ? 'text-white shadow-md' : 'hover:text-white'; ?>"
@@ -157,13 +160,13 @@ function is_active($item, $current_page, $current_view) {
     </div>
 </aside>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
-        }
-    });
-</script>
+<style>
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
+[x-cloak] { display: none !important; }
+</style>
 
 <div class="flex-1 flex flex-col min-w-0 bg-[#f8fafc]">
     <?php require_once 'topbar.php'; ?>
