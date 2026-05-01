@@ -6,15 +6,16 @@ Auth::protect('Clinic Admin');
 $db = getDB();
 $clinic_id = $_SESSION['clinic_id'];
 
-// Search Query
+// Pagination & Search logic
 $search = $_GET['search'] ?? '';
+$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
 
-// Fetch all patients for THIS clinic with search
+// Base query joining users with patient_profiles
 $sql = "
-    SELECT u.*, 
-    (SELECT COUNT(*) FROM appointments WHERE patient_id = u.id) as total_appointments,
-    (SELECT MAX(date_time) FROM appointments WHERE patient_id = u.id) as last_visit
     FROM users u 
+    JOIN patient_profiles pp ON u.id = pp.user_id
     WHERE u.clinic_id = ? 
     AND u.role_id = (SELECT id FROM roles WHERE name = 'Patient')
     AND u.deleted_at IS NULL
@@ -23,151 +24,160 @@ $sql = "
 $params = [$clinic_id];
 
 if ($search) {
-    $sql .= " AND (u.name LIKE ? OR u.email LIKE ? OR u.phone LIKE ?)";
+    $sql .= " AND (pp.first_name LIKE ? OR pp.last_name LIKE ? OR u.email LIKE ? OR pp.mobile_no LIKE ? OR pp.id_no LIKE ?)";
+    $params[] = "%$search%";
+    $params[] = "%$search%";
     $params[] = "%$search%";
     $params[] = "%$search%";
     $params[] = "%$search%";
 }
 
-$sql .= " ORDER BY u.created_at DESC";
+// Get total count for pagination
+$count_stmt = $db->prepare("SELECT COUNT(*) " . $sql);
+$count_stmt->execute($params);
+$total_records = $count_stmt->fetchColumn();
+$total_pages = ceil($total_records / $limit);
 
-$stmt = $db->prepare($sql);
+// Fetch actual data
+$data_sql = "SELECT u.id as user_actual_id, u.email, u.created_at as create_date, pp.* " . $sql . " ORDER BY u.created_at DESC LIMIT $limit OFFSET $offset";
+$stmt = $db->prepare($data_sql);
 $stmt->execute($params);
 $patients = $stmt->fetchAll();
-
-// Fetch Real Stats
-$stmt = $db->prepare("SELECT COUNT(*) FROM users WHERE clinic_id = ? AND role_id = (SELECT id FROM roles WHERE name = 'Patient') AND MONTH(created_at) = MONTH(CURRENT_DATE()) AND YEAR(created_at) = YEAR(CURRENT_DATE())");
-$stmt->execute([$clinic_id]);
-$new_this_month = $stmt->fetchColumn();
-
-$stmt = $db->prepare("SELECT COUNT(*) FROM appointments WHERE clinic_id = ? AND status = 'completed'");
-$stmt->execute([$clinic_id]);
-$total_visits = $stmt->fetchColumn();
 
 require_once 'components/header.php';
 require_once 'components/sidebar.php';
 ?>
 
-<div class="flex flex-col gap-8">
-    <header class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-            <h2 class="text-3xl font-black text-slate-900 tracking-tight">Patients <span class="text-primary">Directory</span></h2>
-            <p class="text-slate-500 mt-1">Manage and view medical history of your patients.</p>
-        </div>
-        <div class="flex items-center gap-3">
-            <a href="patient-add.php" class="bg-primary text-white px-6 py-3.5 rounded-2xl font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform flex items-center gap-2">
-                <span class="text-xl">+</span> Add New Patient
+<!-- DataTables & Buttons Styles/Scripts -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
+
+<div class="space-y-4 animate-in fade-in duration-500">
+    <!-- Header Container -->
+    <div class="bg-white p-4 rounded border border-slate-200 shadow-sm">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <h2 class="text-lg font-bold text-slate-800">Dashboard Doctor</h2>
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Patient List</p>
+            </div>
+            <a href="patient-add.php" class="bg-[#32a852] text-white px-4 py-2 rounded font-bold text-xs hover:bg-[#288a42] transition-all flex items-center gap-2 w-max">
+                <span class="material-icons-round text-sm">add</span> Add Patient
             </a>
         </div>
-    </header>
-
-    <!-- Stats Row (Optional but nice) -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-5">
-            <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-2xl">👥</div>
-            <div>
-                <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Total Patients</p>
-                <h3 class="text-2xl font-black text-slate-900"><?php echo count($patients); ?></h3>
-            </div>
-        </div>
-        <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-5">
-            <div class="w-14 h-14 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center text-2xl">📈</div>
-            <div>
-                <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">New This Month</p>
-                <h3 class="text-2xl font-black text-slate-900"><?php echo $new_this_month; ?></h3>
-            </div>
-        </div>
-        <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-5">
-            <div class="w-14 h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-2xl">📅</div>
-            <div>
-                <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Total Visits</p>
-                <h3 class="text-2xl font-black text-slate-900"><?php echo $total_visits; ?></h3>
-            </div>
-        </div>
     </div>
 
-    <!-- Search & Filter Bar -->
-    <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 flex flex-col md:flex-row gap-4 items-center">
-        <form class="relative flex-1 w-full">
-            <span class="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
-            <input type="text" name="search" value="<?php echo e($search); ?>" placeholder="Search by name, email or phone..." class="w-full pl-12 pr-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary outline-none transition font-medium">
-        </form>
-        <div class="flex items-center gap-2">
-            <button class="px-6 py-4 bg-slate-50 text-slate-600 rounded-2xl font-bold hover:bg-slate-100 transition">Filter</button>
-            <button class="px-6 py-4 bg-slate-50 text-slate-600 rounded-2xl font-bold hover:bg-slate-100 transition">Export</button>
-        </div>
-    </div>
-
-    <!-- Table -->
-    <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden">
+    <!-- Main Table Container -->
+    <div class="bg-white rounded border border-slate-200 p-4 shadow-sm">
         <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="bg-slate-50/50 text-slate-500 uppercase text-[10px] font-black tracking-[0.2em] border-b border-slate-100">
-                        <th class="p-6">Patient Details</th>
-                        <th class="p-6">Contact Info</th>
-                        <th class="p-6">Total Visits</th>
-                        <th class="p-6">Last Visit</th>
-                        <th class="p-6 text-right">Actions</th>
+            <table id="patientTable" class="display cell-border w-full text-left text-[11px] stripe">
+                <thead class="bg-[#f8f9fa]">
+                    <tr>
+                        <th class="border text-slate-700">SL.NO</th>
+                        <th class="border text-slate-700">ID No.</th>
+                        <th class="border text-slate-700">First Name</th>
+                        <th class="border text-slate-700">Last Name</th>
+                        <th class="border text-slate-700">Email Address</th>
+                        <th class="border text-slate-700">Phone No</th>
+                        <th class="border text-slate-700">Mobile No</th>
+                        <th class="border text-slate-700">Address</th>
+                        <th class="border text-slate-700">Sex</th>
+                        <th class="border text-slate-700">Blood Group</th>
+                        <th class="border text-slate-700">Action</th>
+                        <th class="border text-slate-700">Date of Birth</th>
+                        <th class="border text-slate-700">Create Date</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-50">
-                    <?php foreach ($patients as $p): ?>
-                        <tr class="group hover:bg-slate-50/80 transition-all duration-300">
-                            <td class="p-6">
-                                <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center text-slate-600 font-black text-lg border-2 border-white shadow-sm group-hover:scale-110 transition-transform">
-                                        <?php echo substr($p['name'], 0, 1); ?>
-                                    </div>
-                                    <div>
-                                        <p class="font-bold text-slate-900 text-lg leading-none mb-1"><?php echo e($p['name']); ?></p>
-                                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Patient ID: #<?php echo str_pad($p['id'], 5, '0', STR_PAD_LEFT); ?></p>
-                                    </div>
+                <tbody>
+                    <?php 
+                    $sl = $offset + 1;
+                    foreach ($patients as $p): 
+                    ?>
+                        <tr class="hover:bg-slate-50">
+                            <td class="border text-center">
+                                <div class="flex items-center justify-center gap-2">
+                                    <span class="material-icons-round text-green-500 text-base">add_circle</span>
+                                    <?php echo $sl++; ?>
                                 </div>
                             </td>
-                            <td class="p-6">
-                                <div class="space-y-1">
-                                    <p class="text-sm font-medium text-slate-700 flex items-center gap-2">
-                                        <span class="opacity-50">📧</span> <?php echo e($p['email']); ?>
-                                    </p>
-                                    <p class="text-sm font-medium text-slate-500 flex items-center gap-2">
-                                        <span class="opacity-50">📞</span> <?php echo e($p['phone'] ?: 'No phone'); ?>
-                                    </p>
+                            <td class="border"><?php echo e($p['id_no'] ?? 'P'.str_pad($p['user_actual_id'], 6, '0', STR_PAD_LEFT)); ?></td>
+                            <td class="border font-medium"><?php echo e($p['first_name']); ?></td>
+                            <td class="border"><?php echo e($p['last_name']); ?></td>
+                            <td class="border"><?php echo e($p['email']); ?></td>
+                            <td class="border"><?php echo e($p['phone_no'] ?: 'N/A'); ?></td>
+                            <td class="border"><?php echo e($p['mobile_no'] ?: 'N/A'); ?></td>
+                            <td class="border"><?php echo e($p['address'] ?: 'N/A'); ?></td>
+                            <td class="border"><?php echo e($p['sex'] ?: 'N/A'); ?></td>
+                            <td class="border text-center"><?php echo e($p['blood_group'] ?: 'N/A'); ?></td>
+                            <td class="border">
+                                <div class="grid grid-cols-2 gap-1 w-max mx-auto">
+                                    <a href="patient-profile.php?id=<?php echo $p['user_id']; ?>" class="w-6 h-6 bg-green-600 text-white rounded flex items-center justify-center hover:bg-green-700 transition-all shadow-sm" title="View">
+                                        <span class="material-icons-round text-[14px]">visibility</span>
+                                    </a>
+                                    <a href="patient-edit.php?id=<?php echo $p['user_id']; ?>" class="w-6 h-6 bg-blue-500 text-white rounded flex items-center justify-center hover:bg-blue-600 transition-all shadow-sm" title="Edit">
+                                        <span class="material-icons-round text-[14px]">edit</span>
+                                    </a>
+                                    <a href="patient-history.php?id=<?php echo $p['user_id']; ?>" class="w-6 h-6 bg-orange-400 text-white rounded flex items-center justify-center hover:bg-orange-500 transition-all col-span-2 mx-auto shadow-sm" title="Add Document">
+                                        <span class="material-icons-round text-[14px]">add</span>
+                                    </a>
                                 </div>
                             </td>
-                            <td class="p-6">
-                                <span class="px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-xs font-black">
-                                    <?php echo $p['total_appointments']; ?> Visits
-                                </span>
-                            </td>
-                            <td class="p-6">
-                                <p class="text-sm font-bold text-slate-700"><?php echo $p['last_visit'] ? date('M d, Y', strtotime($p['last_visit'])) : 'No visits'; ?></p>
-                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-tight"><?php echo $p['last_visit'] ? date('h:i A', strtotime($p['last_visit'])) : '-'; ?></p>
-                            </td>
-                            <td class="p-6 text-right">
-                                <a href="patient-profile.php?id=<?php echo $p['id']; ?>" class="inline-flex items-center justify-center w-10 h-10 bg-white border border-slate-200 text-slate-600 rounded-xl hover:bg-primary hover:text-white hover:border-primary transition-all shadow-sm">
-                                    <span class="text-lg">👁️</span>
-                                </a>
-                                <button class="inline-flex items-center justify-center w-10 h-10 bg-white border border-slate-200 text-slate-600 rounded-xl hover:bg-slate-900 hover:text-white transition-all shadow-sm">
-                                    <span class="text-lg">✏️</span>
-                                </button>
-                            </td>
+                            <td class="border"><?php echo date('Y-m-d', strtotime($p['dob'])); ?></td>
+                            <td class="border"><?php echo date('Y-m-d', strtotime($p['create_date'])); ?></td>
                         </tr>
                     <?php endforeach; ?>
-                    <?php if (empty($patients)): ?>
-                        <tr>
-                            <td colspan="5" class="p-20 text-center">
-                                <div class="w-24 h-24 bg-slate-50 rounded-[2rem] flex items-center justify-center text-5xl mx-auto mb-6">🔍</div>
-                                <h3 class="text-2xl font-black text-slate-900">No patients found</h3>
-                                <p class="text-slate-500 mt-2 max-w-xs mx-auto">Try adjusting your search or add a new patient to get started.</p>
-                                <a href="patient-add.php" class="inline-block mt-8 text-primary font-bold hover:underline">+ Add Your First Patient</a>
-                            </td>
-                        </tr>
-                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
+<!-- DataTables Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    $('#patientTable').DataTable({
+        "dom": '<"flex flex-col md:flex-row justify-between items-center mb-6"<"flex items-center"l>Bf>rt<"flex justify-between items-center mt-4"ip>',
+        "buttons": [
+            { extend: 'copy', className: 'dt-button-custom' },
+            { extend: 'csv', className: 'dt-button-custom' },
+            { extend: 'excel', className: 'dt-button-custom' },
+            { extend: 'pdf', className: 'dt-button-custom' },
+            { extend: 'print', className: 'dt-button-custom' }
+        ],
+        "language": {
+            "search": "Search:",
+            "lengthMenu": "Show _MENU_ entries"
+        },
+        "pagingType": "simple_numbers"
+    });
+});
+</script>
+
+<style>
+/* Exact Matching Styles */
+.dt-button-custom {
+    @apply bg-[#efefef] border border-slate-300 px-4 py-1.5 text-[11px] font-bold text-slate-700 hover:bg-slate-200 rounded-sm transition-all !important;
+}
+#patientTable thead th {
+    @apply border border-slate-200 font-bold text-slate-700 py-3 px-4 !important;
+}
+#patientTable tbody td {
+    @apply border border-slate-200 py-4 px-4 !important;
+}
+.dataTables_length select {
+    @apply border border-slate-200 rounded px-2 py-1 mx-1 outline-none !important;
+}
+.dataTables_filter input {
+    @apply border border-slate-200 rounded px-2 py-1 ml-1 outline-none !important;
+}
+</style>
 
 <?php require_once 'components/footer.php'; ?>
