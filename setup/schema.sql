@@ -13,6 +13,7 @@ CREATE TABLE `clinics` (
     `status` ENUM('active', 'suspended', 'pending') DEFAULT 'pending',
     `logo_url` VARCHAR(255),
     `primary_color` VARCHAR(7) DEFAULT '#3b82f6',
+    `config` JSON, -- Stores clinic settings, working hours, website content
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `deleted_at` TIMESTAMP NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

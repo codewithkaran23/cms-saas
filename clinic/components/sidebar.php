@@ -5,7 +5,17 @@ $current_page = basename($_SERVER['PHP_SELF']);
 $nav_items = [
     'index.php' => ['label' => 'Dashboard', 'icon' => '📊'],
     'appointments.php' => ['label' => 'Appointments', 'icon' => '📅'],
-    'patients.php' => ['label' => 'Patients', 'icon' => '👥'],
+    'doctors.php' => ['label' => 'Doctors', 'icon' => '👨‍⚕️'],
+    'patients' => [
+        'label' => 'Patients', 
+        'icon' => '👥',
+        'sub_items' => [
+            'patients.php' => 'Patient List',
+            'patient-profile.php' => 'Profile',
+            'patient-history.php' => 'Visit History',
+            'patient-search.php' => 'Search',
+        ]
+    ],
     'settings.php' => ['label' => 'Settings', 'icon' => '⚙️'],
 ];
 ?>
@@ -27,15 +37,36 @@ $nav_items = [
     <nav class="flex-1 px-6 py-8 space-y-2 overflow-y-auto">
         <?php foreach ($nav_items as $url => $data): ?>
             <?php 
-                $is_active = ($current_page === $url); 
-                $active_classes = $is_active 
-                    ? 'bg-primary text-white shadow-md shadow-primary/20' 
-                    : 'text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors';
-            ?>
-            <a href="<?php echo base_url('clinic/' . $url); ?>" class="flex items-center gap-4 px-4 py-3.5 rounded-xl font-medium <?php echo $active_classes; ?>">
-                <span class="text-xl"><?php echo $data['icon']; ?></span>
-                <?php echo $data['label']; ?>
-            </a>
+                if (isset($data['sub_items'])) {
+                    $is_parent_active = in_array($current_page, array_keys($data['sub_items']));
+                    ?>
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-4 px-4 py-3.5 rounded-xl font-bold text-slate-900 <?php echo $is_parent_active ? 'bg-slate-50' : ''; ?>">
+                            <span class="text-xl"><?php echo $data['icon']; ?></span>
+                            <?php echo $data['label']; ?>
+                        </div>
+                        <div class="pl-12 space-y-1">
+                            <?php foreach ($data['sub_items'] as $sub_url => $sub_label): 
+                                $is_sub_active = ($current_page === $sub_url);
+                            ?>
+                                <a href="<?php echo base_url('clinic/' . $sub_url); ?>" class="block py-2 text-sm font-bold transition-colors <?php echo $is_sub_active ? 'text-primary' : 'text-slate-400 hover:text-slate-600'; ?>">
+                                    • <?php echo $sub_label; ?>
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                    <?php
+                } else {
+                    $is_active = ($current_page === $url); 
+                    $active_classes = $is_active 
+                        ? 'bg-primary text-white shadow-md shadow-primary/20' 
+                        : 'text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors';
+                    ?>
+                    <a href="<?php echo base_url('clinic/' . $url); ?>" class="flex items-center gap-4 px-4 py-3.5 rounded-xl font-bold <?php echo $active_classes; ?>">
+                        <span class="text-xl"><?php echo $data['icon']; ?></span>
+                        <?php echo $data['label']; ?>
+                    </a>
+                <?php } ?>
         <?php endforeach; ?>
     </nav>
 
