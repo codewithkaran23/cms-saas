@@ -16,8 +16,8 @@ class TenantManager {
                 $subdomain = $_GET['clinic'];
             } elseif (isset($_GET['admin'])) {
                 return ['type' => 'super_admin'];
-            } elseif (isset($_SESSION['clinic_id'])) {
-                // FALLBACK: If we are logged in as a Clinic Admin, use their session clinic
+            } elseif (isset($_SESSION['clinic_id']) && $_SERVER['SCRIPT_NAME'] !== '/cms-saas/index.php') {
+                // FALLBACK: Use session only if we are NOT on the main platform landing page
                 $db = getDB();
                 $stmt = $db->prepare("SELECT * FROM clinics WHERE id = ? AND deleted_at IS NULL");
                 $stmt->execute([$_SESSION['clinic_id']]);
@@ -39,11 +39,18 @@ class TenantManager {
 
         if ($subdomain) {
             $db = getDB();
-            $stmt = $db->prepare("SELECT * FROM clinics WHERE subdomain = ? AND status = 'active' AND deleted_at IS NULL");
+            $stmt = $db->prepare("SELECT * FROM clinics WHERE subdomain = ? AND deleted_at IS NULL");
             $stmt->execute([$subdomain]);
             $clinic = $stmt->fetch();
 
             if ($clinic) {
+                // If clinic is pending, only allow access if logged in as the owner
+                if ($clinic['status'] === 'pending') {
+                    if (!isset($_SESSION['clinic_id']) || $_SESSION['clinic_id'] != $clinic['id']) {
+                        return ['type' => 'platform'];
+                    }
+                }
+
                 self::$currentClinic = $clinic;
                 return ['type' => 'clinic', 'data' => $clinic];
             }

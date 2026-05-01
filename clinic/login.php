@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Attempt login scoped to THIS clinic
     if (Auth::login($email, $password, $clinic['id'])) {
-        redirect('clinic-admin/index.php');
+        redirect('clinic/index.php');
     } else {
         $error = 'Invalid credentials for ' . $clinic['name'];
     }

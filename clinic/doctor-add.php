@@ -1,5 +1,5 @@
 <?php
-// clinic-admin/doctor-add.php
+// clinic/doctor-add.php
 require_once '../core/init.php';
 Auth::protect('Clinic Admin');
 
@@ -68,11 +68,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h1 class="text-xl font-bold text-gray-800">Clinic Admin</h1>
         </div>
         <nav class="space-y-4">
-            <a href="<?php echo base_url('clinic-admin/index.php'); ?>" class="block py-2 px-4 text-gray-600 hover:bg-gray-50 rounded-lg">Dashboard</a>
-            <a href="<?php echo base_url('clinic-admin/doctors.php'); ?>" class="block py-2 px-4 bg-primary text-white rounded-lg font-bold shadow-md">Doctors</a>
-            <a href="<?php echo base_url('clinic-admin/patients.php'); ?>" class="block py-2 px-4 text-gray-600 hover:bg-gray-50 rounded-lg">Patients</a>
+            <a href="<?php echo base_url('clinic/index.php'); ?>" class="block py-2 px-4 text-gray-600 hover:bg-gray-50 rounded-lg">Dashboard</a>
+            <a href="<?php echo base_url('clinic/doctors.php'); ?>" class="block py-2 px-4 bg-primary text-white rounded-lg font-bold shadow-md">Doctors</a>
+            <a href="<?php echo base_url('clinic/patients.php'); ?>" class="block py-2 px-4 text-gray-600 hover:bg-gray-50 rounded-lg">Patients</a>
             <div class="pt-10">
-                <a href="<?php echo base_url('admin/logout.php'); ?>" class="block py-2 px-4 text-red-500 font-bold">Logout</a>
+                <a href="<?php echo base_url('super-admin/logout.php'); ?>" class="block py-2 px-4 text-red-500 font-bold">Logout</a>
             </div>
         </nav>
     </aside>
@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <main class="flex-1 p-10">
         <div class="max-w-2xl mx-auto">
             <header class="mb-10">
-                <a href="<?php echo base_url('clinic-admin/doctors.php'); ?>" class="text-primary font-bold text-sm mb-2 inline-block">← Back to List</a>
+                <a href="<?php echo base_url('clinic/doctors.php'); ?>" class="text-primary font-bold text-sm mb-2 inline-block">← Back to List</a>
                 <h2 class="text-3xl font-bold text-gray-800">Add New Doctor</h2>
             </header>
 

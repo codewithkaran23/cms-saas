@@ -52,7 +52,7 @@ $patients_count = $total_patients->fetchColumn();
             <a href="appointments.php" class="block py-2 px-4 hover:bg-white/10 rounded-lg text-indigo-300 transition">All Appointments</a>
             <a href="patients.php" class="block py-2 px-4 hover:bg-white/10 rounded-lg text-indigo-300 transition">My Patients</a>
             <div class="pt-10">
-                <a href="../admin/logout.php" class="block py-2 px-4 text-red-400 font-bold">Logout</a>
+                <a href="../super-admin/logout.php" class="block py-2 px-4 text-red-400 font-bold">Logout</a>
             </div>
         </nav>
     </aside>

@@ -47,7 +47,7 @@ $doctors = $stmt->fetchAll();
             <a href="<?php echo base_url('?clinic='.$clinic['subdomain']); ?>" class="text-sm font-medium text-gray-600 hover:text-primary">Home</a>
             <?php if (Auth::check()): ?>
                 <a href="dashboard.php" class="text-sm font-medium text-gray-600 hover:text-primary">My Appointments</a>
-                <a href="../admin/logout.php" class="bg-gray-100 px-4 py-2 rounded-lg text-sm font-bold text-gray-600">Logout</a>
+                <a href="../super-admin/logout.php" class="bg-gray-100 px-4 py-2 rounded-lg text-sm font-bold text-gray-600">Logout</a>
             <?php else: ?>
                 <a href="login.php" class="bg-primary text-white px-6 py-2 rounded-lg text-sm font-bold shadow-md">Login / Register</a>
             <?php endif; ?>

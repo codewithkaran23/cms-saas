@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Attempt Super Admin login (clinic_id is NULL)
     if (Auth::login($email, $password)) {
-        redirect('admin/index.php');
+        redirect('super-admin/index.php');
     } else {
         $error = 'Invalid email or password.';
     }

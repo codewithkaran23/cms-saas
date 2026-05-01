@@ -1,5 +1,5 @@
 <?php
-// doctor/visit.php
+// doctor/visit.php - CLINICAL RECORDS MODULE
 require_once '../core/init.php';
 Auth::protect('Doctor');
 

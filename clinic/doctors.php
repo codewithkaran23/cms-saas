@@ -1,5 +1,5 @@
 <?php
-// clinic-admin/doctors.php
+// clinic/doctors.php
 require_once '../core/init.php';
 Auth::protect('Clinic Admin');
 
@@ -39,13 +39,13 @@ $doctors = $stmt->fetchAll();
             <h1 class="text-xl font-bold text-gray-800">Clinic Admin</h1>
         </div>
         <nav class="space-y-4">
-            <a href="<?php echo base_url('clinic-admin/index.php'); ?>" class="block py-2 px-4 text-gray-600 hover:bg-gray-50 rounded-lg">Dashboard</a>
-            <a href="<?php echo base_url('clinic-admin/doctors.php'); ?>" class="block py-2 px-4 bg-primary text-white rounded-lg font-bold shadow-md">Doctors</a>
-            <a href="<?php echo base_url('clinic-admin/patients.php'); ?>" class="block py-2 px-4 text-gray-600 hover:bg-gray-50 rounded-lg">Patients</a>
-            <a href="<?php echo base_url('clinic-admin/appointments.php'); ?>" class="block py-2 px-4 text-gray-600 hover:bg-gray-50 rounded-lg">Appointments</a>
-            <a href="<?php echo base_url('clinic-admin/settings.php'); ?>" class="block py-2 px-4 text-gray-600 hover:bg-gray-50 rounded-lg">Website Builder</a>
+            <a href="<?php echo base_url('clinic/index.php'); ?>" class="block py-2 px-4 text-gray-600 hover:bg-gray-50 rounded-lg">Dashboard</a>
+            <a href="<?php echo base_url('clinic/doctors.php'); ?>" class="block py-2 px-4 bg-primary text-white rounded-lg font-bold shadow-md">Doctors</a>
+            <a href="<?php echo base_url('clinic/patients.php'); ?>" class="block py-2 px-4 text-gray-600 hover:bg-gray-50 rounded-lg">Patients</a>
+            <a href="<?php echo base_url('clinic/appointments.php'); ?>" class="block py-2 px-4 text-gray-600 hover:bg-gray-50 rounded-lg">Appointments</a>
+            <a href="<?php echo base_url('clinic/settings.php'); ?>" class="block py-2 px-4 text-gray-600 hover:bg-gray-50 rounded-lg">Website Builder</a>
             <div class="pt-10">
-                <a href="<?php echo base_url('admin/logout.php'); ?>" class="block py-2 px-4 text-red-500 font-bold">Logout</a>
+                <a href="<?php echo base_url('super-admin/logout.php'); ?>" class="block py-2 px-4 text-red-500 font-bold">Logout</a>
             </div>
         </nav>
     </aside>
@@ -53,7 +53,7 @@ $doctors = $stmt->fetchAll();
     <main class="flex-1 p-10">
         <header class="flex justify-between items-center mb-10">
             <h2 class="text-3xl font-bold text-gray-800">Our Doctors</h2>
-            <a href="<?php echo base_url('clinic-admin/doctor-add.php'); ?>" class="bg-primary text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:opacity-90 transition">
+            <a href="<?php echo base_url('clinic/doctor-add.php'); ?>" class="bg-primary text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:opacity-90 transition">
                 + Add New Doctor
             </a>
         </header>

@@ -1,5 +1,5 @@
 <?php
-// clinic-admin/settings.php
+// clinic/settings.php
 require_once '../core/init.php';
 Auth::protect('Clinic Admin');
 
@@ -45,38 +45,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $clinic_data['primary_color'] = $primary_color;
     $config = $new_config;
 }
+require_once 'components/header.php';
+require_once 'components/sidebar.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Website Builder | <?php echo e($clinic_data['name']); ?></title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        :root { --primary: <?php echo $clinic_data['primary_color']; ?>; }
-        .bg-primary { background-color: var(--primary); }
-    </style>
-</head>
-<body class="bg-slate-50 flex">
 
-    <!-- Sidebar -->
-    <aside class="w-64 bg-white border-r border-gray-200 min-h-screen p-6 sticky top-0 h-screen">
-        <div class="flex items-center gap-3 mb-10">
-            <div class="w-8 h-8 bg-primary rounded shadow-lg shadow-primary/20"></div>
-            <h1 class="text-xl font-bold text-gray-800">Clinic Admin</h1>
-        </div>
-        <nav class="space-y-4">
-            <a href="index.php" class="block py-2 px-4 text-gray-500 hover:bg-gray-50 rounded-lg font-medium transition">Dashboard</a>
-            <a href="doctors.php" class="block py-2 px-4 text-gray-500 hover:bg-gray-50 rounded-lg font-medium transition">Doctors</a>
-            <a href="appointments.php" class="block py-2 px-4 text-gray-500 hover:bg-gray-50 rounded-lg font-medium transition">Appointments</a>
-            <a href="settings.php" class="block py-2 px-4 bg-primary text-white rounded-lg font-bold shadow-xl shadow-primary/20">Website Builder</a>
-            <div class="pt-10">
-                <a href="../admin/logout.php" class="block py-2 px-4 text-red-500 font-bold">Logout</a>
-            </div>
-        </nav>
-    </aside>
-
-    <main class="flex-1 p-10 max-w-5xl">
+<div class="max-w-5xl">
         <header class="mb-10 flex justify-between items-center">
             <div>
                 <h2 class="text-3xl font-black text-gray-900">Customise Your <span class="text-primary">Website</span></h2>
@@ -153,7 +126,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 Publish Changes Live
             </button>
         </form>
-    </main>
-
-</body>
-</html>
+</div>
+<?php require_once 'components/footer.php'; ?>

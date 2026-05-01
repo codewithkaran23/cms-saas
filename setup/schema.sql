@@ -104,3 +104,19 @@ CREATE TABLE `audit_logs` (
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`),
     FOREIGN KEY (`clinic_id`) REFERENCES `clinics`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 9. System Settings
+CREATE TABLE `system_settings` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `setting_key` VARCHAR(100) NOT NULL UNIQUE,
+    `setting_value` TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 10. Subscription Plans
+CREATE TABLE `subscription_plans` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `tier_name` VARCHAR(50) NOT NULL UNIQUE,
+    `price` DECIMAL(10,2) NOT NULL,
+    `features` TEXT,
+    `is_active` BOOLEAN DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -7,14 +7,14 @@ if (!$clinic) die("Clinic context required.");
 $db = getDB();
 $doctor_id = $_GET['doctor_id'] ?? null;
 
-if (!$doctor_id) redirect('portal/index.php');
+if (!$doctor_id) redirect('patient/index.php');
 
 // Fetch doctor details
 $stmt = $db->prepare("SELECT u.*, dp.specialization FROM users u JOIN doctor_profiles dp ON u.id = dp.user_id WHERE u.id = ? AND u.clinic_id = ?");
 $stmt->execute([$doctor_id, $clinic['id']]);
 $doctor = $stmt->fetch();
 
-if (!$doctor) redirect('portal/index.php');
+if (!$doctor) redirect('patient/index.php');
 
 $success = '';
 $error = '';
