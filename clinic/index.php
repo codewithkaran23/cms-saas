@@ -27,90 +27,90 @@ require_once 'components/sidebar.php';
 <div class="space-y-8">
     
     <!-- Top Stats Row -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- Card 1 -->
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all">
-            <div class="flex justify-between items-start mb-4">
-                <div class="w-12 h-12 bg-teal-50 text-teal-600 rounded-xl flex items-center justify-center">
-                    <span class="material-icons-round">medical_services</span>
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:border-blue-500/30 transition-all">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-10 h-10 bg-slate-50 text-slate-600 rounded-lg flex items-center justify-center">
+                    <i data-lucide="stethoscope" class="w-5 h-5 inline-block min-w-[1.25rem]"></i>
                 </div>
-                <div class="flex items-center gap-1 text-green-600 font-bold text-xs">
-                    <span class="material-icons-round text-sm">north_east</span>
+                <div class="flex items-center gap-1 text-green-600 font-bold text-[10px]">
+                    <i data-lucide="trending-up" class="w-3 h-3 inline-block min-w-[0.75rem]"></i>
                     +9.01%
                 </div>
             </div>
-            <p class="text-slate-500 text-sm font-semibold">Total Doctors</p>
-            <h3 class="text-2xl font-bold text-slate-900 mt-1"><?php echo number_format($doctor_count); ?></h3>
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-wider">Total Doctors</p>
+            <h3 class="text-xl font-bold text-slate-900 mt-0.5"><?php echo number_format($doctor_count); ?></h3>
         </div>
 
         <!-- Card 2 -->
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all">
-            <div class="flex justify-between items-start mb-4">
-                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center">
-                    <span class="material-icons-round">group</span>
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:border-blue-500/30 transition-all">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-10 h-10 bg-slate-50 text-slate-600 rounded-lg flex items-center justify-center">
+                    <i data-lucide="users" class="w-5 h-5"></i>
                 </div>
-                <div class="flex items-center gap-1 text-red-500 font-bold text-xs">
-                    <span class="material-icons-round text-sm">south_east</span>
+                <div class="flex items-center gap-1 text-red-500 font-bold text-[10px]">
+                    <i data-lucide="trending-down" class="w-3 h-3"></i>
                     -11.01%
                 </div>
             </div>
-            <p class="text-slate-500 text-sm font-semibold">Total Patients</p>
-            <h3 class="text-2xl font-bold text-slate-900 mt-1"><?php echo number_format($patient_count > 0 ? $patient_count : 22000); ?></h3>
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-wider">Total Patients</p>
+            <h3 class="text-xl font-bold text-slate-900 mt-0.5"><?php echo number_format($patient_count > 0 ? $patient_count : 22000); ?></h3>
         </div>
 
         <!-- Card 3 -->
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all">
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all">
             <div class="flex justify-between items-start mb-4">
-                <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center">
-                    <span class="material-icons-round">calendar_today</span>
+                <div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center">
+                    <i data-lucide="calendar" class="w-5 h-5"></i>
                 </div>
-                <div class="flex items-center gap-1 text-green-600 font-bold text-xs">
-                    <span class="material-icons-round text-sm">north_east</span>
+                <div class="flex items-center gap-1 text-green-600 font-bold text-[10px]">
+                    <i data-lucide="trending-up" class="w-3 h-3"></i>
                     +8.01%
                 </div>
             </div>
-            <p class="text-slate-500 text-sm font-semibold">Total Appointments</p>
-            <h3 class="text-2xl font-bold text-slate-900 mt-1"><?php echo number_format($appointment_count > 0 ? $appointment_count : 12900); ?></h3>
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-wider">Total Appointments</p>
+            <h3 class="text-xl font-bold text-slate-900 mt-0.5"><?php echo number_format($appointment_count > 0 ? $appointment_count : 12900); ?></h3>
         </div>
 
         <!-- Card 4 -->
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all">
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all">
             <div class="flex justify-between items-start mb-4">
-                <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center">
-                    <span class="material-icons-round">payments</span>
+                <div class="w-10 h-10 bg-amber-50 text-amber-600 rounded-lg flex items-center justify-center">
+                    <i data-lucide="dollar-sign" class="w-5 h-5"></i>
                 </div>
-                <div class="flex items-center gap-1 text-green-600 font-bold text-xs">
-                    <span class="material-icons-round text-sm">north_east</span>
+                <div class="flex items-center gap-1 text-green-600 font-bold text-[10px]">
+                    <i data-lucide="trending-up" class="w-3 h-3"></i>
                     +10.01%
                 </div>
             </div>
-            <p class="text-slate-500 text-sm font-semibold">Total Revenue</p>
-            <h3 class="text-2xl font-bold text-slate-900 mt-1">$72,400</h3>
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-wider">Total Revenue</p>
+            <h3 class="text-xl font-bold text-slate-900 mt-0.5">$72,400</h3>
         </div>
     </div>
 
     <!-- Charts Section -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Main Line Chart -->
-        <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <div class="lg:col-span-2 bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
             <div class="flex justify-between items-center mb-6">
-                <h4 class="text-base font-bold text-slate-900">Patients Overview</h4>
+                <h4 class="text-sm font-bold text-slate-900 uppercase tracking-tight">Patients Overview</h4>
                 <div class="flex gap-4">
                     <div class="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase">
-                        <span class="w-2.5 h-2.5 rounded-full bg-teal-400"></span> Patient
+                        <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Patient
                     </div>
                     <div class="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase">
-                        <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span> Inpatient
+                        <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span> Inpatient
                     </div>
                 </div>
             </div>
-            <canvas id="patientsOverview" height="150"></canvas>
+            <canvas id="patientsOverview" height="130"></canvas>
         </div>
 
         <!-- Donut Chart -->
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-            <h4 class="text-base font-bold text-slate-900 mb-6">Patients Demographics</h4>
-            <div class="relative h-48 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+            <h4 class="text-sm font-bold text-slate-900 uppercase tracking-tight mb-6">Patients Demographics</h4>
+            <div class="relative h-44 flex items-center justify-center">
                 <canvas id="demographicsChart"></canvas>
             </div>
             <div class="mt-6 grid grid-cols-2 gap-3 text-[10px] font-bold">
@@ -123,16 +123,17 @@ require_once 'components/sidebar.php';
     </div>
 
     <!-- Recent Patients Table -->
-    <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-        <div class="p-8 flex justify-between items-center border-b border-slate-100">
-            <h4 class="text-lg font-bold text-slate-900">Recent Patient</h4>
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-6 flex justify-between items-center border-b border-slate-100">
+            <h4 class="text-sm font-bold text-slate-900 uppercase tracking-tight">Recent Patient</h4>
             <div class="flex gap-4">
                 <div class="relative">
-                    <span class="material-icons-round absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
-                    <input type="text" placeholder="Search..." class="bg-slate-50 border border-slate-200 rounded-xl py-2 pl-10 pr-4 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/10">
+                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4"></i>
+                    <input type="text" placeholder="Search..." class="bg-slate-50 border border-slate-200 rounded-lg py-2 pl-10 pr-4 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/10 w-64">
                 </div>
-                <button class="w-10 h-10 border border-slate-200 rounded-xl flex items-center justify-center text-slate-500 hover:bg-slate-50 transition">
-                    <span class="material-icons-round">filter_list</span>
+                <button class="flex items-center gap-2 bg-slate-900 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-slate-800 transition">
+                    <i data-lucide="filter" class="w-3.5 h-3.5"></i>
+                    Filter
                 </button>
             </div>
         </div>
@@ -174,7 +175,7 @@ require_once 'components/sidebar.php';
                                 </span>
                             </td>
                             <td class="px-8 py-4 text-right">
-                                <button class="text-slate-400 hover:text-slate-600 transition"><span class="material-icons-round">more_vert</span></button>
+                                <button class="text-slate-400 hover:text-slate-600 transition"><i data-lucide="more-vertical" class="w-4 h-4"></i></button>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -194,15 +195,15 @@ require_once 'components/sidebar.php';
             datasets: [{
                 label: 'Patient',
                 data: [40, 60, 55, 60, 45, 65, 55, 70, 60, 80],
-                borderColor: '#2dd4bf',
-                backgroundColor: 'rgba(45, 212, 191, 0.1)',
+                borderColor: '<?php echo $clinic['primary_color']; ?>',
+                backgroundColor: '<?php echo $clinic['primary_color']; ?>20',
                 fill: true,
                 tension: 0.4
             }, {
                 label: 'Inpatient',
                 data: [30, 40, 35, 70, 40, 50, 75, 45, 50, 95],
-                borderColor: '#2563eb',
-                backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                borderColor: '#64748b',
+                backgroundColor: '#64748b20',
                 fill: true,
                 tension: 0.4
             }]
@@ -225,7 +226,7 @@ require_once 'components/sidebar.php';
             labels: ['0-18', '19-35', '36-55', '55+'],
             datasets: [{
                 data: [15, 30, 40, 15],
-                backgroundColor: ['#fb923c', '#2563eb', '#2dd4bf', '#93c5fd'],
+                backgroundColor: ['#fb923c', '<?php echo $clinic['primary_color']; ?>', '#2dd4bf', '#94a3b8'],
                 borderWidth: 0,
                 cutout: '75%'
             }]
