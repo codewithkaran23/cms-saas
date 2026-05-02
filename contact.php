@@ -1,140 +1,187 @@
-<?php require_once 'core/init.php'; ?>
+<?php
+// contact.php
+require_once 'core/init.php';
+?>
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us | MedOS</title>
+    <title>Contact Us | MedOS Partnership</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
-                    colors: { primary: '#0f766e', accent: '#14d1c0' }
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    colors: {
+                        emerald: { 50: '#ecfdf5', 100: '#d1fae5', 200: '#a7f3d0', 300: '#6ee7b7', 400: '#34d399', 500: '#10b981', 600: '#059669', 700: '#047857', 800: '#065f46', 900: '#064e3b' }
+                    }
                 }
             }
         }
     </script>
+    <style>
+        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); }
+        .emerald-gradient { background: linear-gradient(135deg, #059669 0%, #10b981 100%); }
+        .text-gradient { background: linear-gradient(135deg, #064e3b 0%, #059669 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        [x-cloak] { display: none !important; }
+    </style>
 </head>
-<body class="bg-gradient-to-br from-teal-50 via-slate-100 to-teal-100/50 bg-fixed text-slate-600 font-sans selection:bg-accent selection:text-slate-900 overflow-x-hidden min-h-screen flex flex-col">
+<body class="bg-[#fcfdfd] text-slate-600 font-sans" x-data="{ tab: 'demo' }">
 
     <!-- Navigation -->
-    <nav class="absolute top-0 w-full z-50 border-b border-slate-200 bg-white/80 backdrop-blur-md shadow-sm">
+    <nav class="fixed top-0 w-full z-[100] border-b border-slate-100/50 glass">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="index.php" class="flex items-center gap-2 text-2xl font-black tracking-tighter uppercase text-slate-900">
-                <div class="w-8 h-8 bg-primary text-white rounded-lg flex items-center justify-center text-lg">+</div>
-                MED<span class="text-primary">OS</span>
+            <a href="index.php" class="flex items-center gap-3">
+                <div class="w-10 h-10 emerald-gradient text-white rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                    <i data-lucide="heart-pulse" class="w-6 h-6"></i>
+                </div>
+                <span class="text-2xl font-black tracking-tighter uppercase text-slate-900">MED<span class="text-emerald-600">OS</span></span>
             </a>
-            <div class="hidden lg:flex items-center gap-10 text-sm font-semibold uppercase tracking-widest text-slate-500">
-                <a href="about.php" class="hover:text-primary transition">About Us</a>
-                <a href="services.php" class="hover:text-primary transition">Services</a>
-                <a href="contact.php" class="text-primary transition">Contact</a>
-                <a href="index.php#pricing" class="hover:text-primary transition">Pricing</a>
-                <?php if (Auth::check()): ?>
-                    <a href="clinic/index.php" class="text-primary border border-primary px-8 py-2.5 rounded-full hover:bg-primary hover:text-white transition shadow-sm">Dashboard</a>
-                    <a href="logout.php" class="text-slate-500 hover:text-red-500 transition font-bold">Logout</a>
-                <?php else: ?>
-                    <a href="login.php" class="text-primary border border-primary px-8 py-2.5 rounded-full hover:bg-primary hover:text-white transition shadow-sm">Sign In</a>
-                <?php endif; ?>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="about.php" class="text-xs font-black uppercase tracking-widest text-slate-400 hover:text-emerald-600 transition-colors">About Us</a>
+                <a href="how-it-works.php" class="text-xs font-black uppercase tracking-widest text-slate-400 hover:text-emerald-600 transition-colors">How it Works</a>
+                <a href="pricing.php" class="text-xs font-black uppercase tracking-widest text-slate-400 hover:text-emerald-600 transition-colors">Pricing</a>
+                <a href="contact.php" class="text-xs font-black uppercase tracking-widest text-emerald-600">Contact</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="login.php" class="px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest text-slate-600 hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100">Sign In</a>
+                <a href="login.php" class="px-6 py-2.5 emerald-gradient text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-xl shadow-emerald-600/20 hover:scale-105 active:scale-95 transition-all">Get Started</a>
             </div>
         </div>
     </nav>
 
-    <div class="pt-40 pb-24 flex-1">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <span class="text-primary font-bold uppercase tracking-[0.2em] text-sm mb-4 block">Get in Touch</span>
-                <h1 class="text-5xl font-extrabold text-slate-900 tracking-tight">We're Here to Help.</h1>
-            </div>
+    <!-- Page Header -->
+    <header class="pt-48 pb-24 bg-white">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h1 class="text-6xl md:text-8xl font-black text-slate-900 tracking-tighter mb-8 leading-tight">Let's build your <span class="text-gradient">modern practice.</span></h1>
+            <p class="text-xl text-slate-500 font-medium leading-relaxed">Whether you're looking for a personalized demo or need technical support, our team is ready to assist you.</p>
+        </div>
+    </header>
 
-            <div class="grid lg:grid-cols-2 gap-16">
-                <!-- Form Area -->
-                <div class="bg-white p-10 rounded-3xl border border-slate-200 shadow-xl relative z-10">
-                    <form class="space-y-6" onsubmit="event.preventDefault(); alert('Thank you for contacting us! We will be in touch shortly.');">
-                        <div class="grid grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-slate-700 text-sm font-bold mb-2 uppercase tracking-wide">First Name</label>
-                                <input type="text" required class="w-full bg-slate-50 border border-slate-200 text-slate-900 px-6 py-4 rounded-xl outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition">
-                            </div>
-                            <div>
-                                <label class="block text-slate-700 text-sm font-bold mb-2 uppercase tracking-wide">Last Name</label>
-                                <input type="text" required class="w-full bg-slate-50 border border-slate-200 text-slate-900 px-6 py-4 rounded-xl outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition">
-                            </div>
+    <!-- Contact Form & Info -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-3 gap-20">
+            
+            <!-- Left: Info -->
+            <div class="space-y-12">
+                <div>
+                    <h4 class="text-xs font-black text-emerald-600 uppercase tracking-widest mb-6">Our Headquarters</h4>
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center shrink-0"><i data-lucide="map-pin" class="w-5 h-5"></i></div>
+                            <p class="text-sm font-bold text-slate-700 leading-relaxed">123 Clinical Plaza, Innovation District<br>New York, NY 10001, USA</p>
                         </div>
-                        <div>
-                            <label class="block text-slate-700 text-sm font-bold mb-2 uppercase tracking-wide">Work Email</label>
-                            <input type="email" required class="w-full bg-slate-50 border border-slate-200 text-slate-900 px-6 py-4 rounded-xl outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition">
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center shrink-0"><i data-lucide="mail" class="w-5 h-5"></i></div>
+                            <p class="text-sm font-bold text-slate-700 leading-relaxed">hello@medos-clinical.com<br>support@medos-clinical.com</p>
                         </div>
-                        <div>
-                            <label class="block text-slate-700 text-sm font-bold mb-2 uppercase tracking-wide">Message</label>
-                            <textarea required rows="4" class="w-full bg-slate-50 border border-slate-200 text-slate-900 px-6 py-4 rounded-xl outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition resize-none"></textarea>
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center shrink-0"><i data-lucide="phone" class="w-5 h-5"></i></div>
+                            <p class="text-sm font-bold text-slate-700 leading-relaxed">+1 (800) MED-OS-01<br>Mon-Fri, 9am - 6pm EST</p>
                         </div>
-                        <button type="submit" class="w-full bg-primary text-white font-bold py-4 rounded-xl hover:bg-teal-800 shadow-md shadow-primary/20 transition mt-2">Send Message</button>
-                    </form>
+                    </div>
                 </div>
 
-                <!-- Info Area -->
-                <div class="flex flex-col justify-center space-y-12">
-                    <div>
-                        <h3 class="text-2xl font-bold text-slate-900 mb-4">Enterprise Sales</h3>
-                        <p class="text-slate-500 mb-6">Looking to deploy MedOS across multiple branches or a hospital network? Talk to our enterprise specialists.</p>
-                        <a href="mailto:sales@medos.com" class="font-bold text-primary hover:underline flex items-center gap-2">sales@medos.com <span>→</span></a>
-                    </div>
-                    <div>
-                        <h3 class="text-2xl font-bold text-slate-900 mb-4">Customer Support</h3>
-                        <p class="text-slate-500 mb-6">Already using MedOS and need help? Our technical support team is available 24/7 to assist you.</p>
-                        <a href="mailto:support@medos.com" class="font-bold text-primary hover:underline flex items-center gap-2">support@medos.com <span>→</span></a>
-                    </div>
-                    <div class="pt-8 border-t border-slate-200">
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-teal-50 text-primary rounded-full flex items-center justify-center text-xl shrink-0">📍</div>
-                            <div>
-                                <h4 class="font-bold text-slate-900 mb-1">Headquarters</h4>
-                                <p class="text-slate-500 text-sm">123 Software Ave, Tech District<br>San Francisco, CA 94107</p>
-                            </div>
+                <div>
+                    <h4 class="text-xs font-black text-emerald-600 uppercase tracking-widest mb-6">Support Tiers</h4>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                            <h6 class="text-xs font-black text-slate-900 uppercase tracking-widest mb-1">Standard Support</h6>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">24-hour response time</p>
+                        </div>
+                        <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
+                            <h6 class="text-xs font-black text-emerald-700 uppercase tracking-widest mb-1">Priority Support</h6>
+                            <p class="text-[10px] text-emerald-600 font-bold uppercase tracking-widest">2-hour response time (Practice Plan)</p>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Right: Form -->
+            <div class="lg:col-span-2">
+                <!-- Tab Switcher -->
+                <div class="flex p-1 bg-slate-100 rounded-[2.5rem] mb-12">
+                    <button @click="tab = 'demo'" :class="tab === 'demo' ? 'bg-white text-slate-900 shadow-xl' : 'text-slate-400'" 
+                            class="flex-1 py-5 rounded-[2.5rem] text-xs font-black uppercase tracking-widest transition-all">Book a Demo</button>
+                    <button @click="tab = 'support'" :class="tab === 'support' ? 'bg-white text-slate-900 shadow-xl' : 'text-slate-400'" 
+                            class="flex-1 py-5 rounded-[2.5rem] text-xs font-black uppercase tracking-widest transition-all">Technical Support</button>
+                </div>
+
+                <div class="bg-white p-12 rounded-[3.5rem] border border-slate-100 shadow-2xl shadow-emerald-900/5">
+                    <!-- Demo Form -->
+                    <form x-show="tab === 'demo'" x-cloak class="space-y-8 animate-in fade-in duration-500">
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div class="space-y-3">
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Full Name</label>
+                                <input type="text" placeholder="Dr. John Smith" class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-6 py-5 text-slate-700 font-bold text-sm focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all">
+                            </div>
+                            <div class="space-y-3">
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Work Email</label>
+                                <input type="email" placeholder="john@clinic.com" class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-6 py-5 text-slate-700 font-bold text-sm focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all">
+                            </div>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div class="space-y-3">
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Clinic Size</label>
+                                <select class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-6 py-5 text-slate-700 font-bold text-sm focus:bg-white focus:border-emerald-500 outline-none transition-all">
+                                    <option>Solo Practitioner</option>
+                                    <option>2-5 Doctors</option>
+                                    <option>5-20 Doctors</option>
+                                    <option>Large Hospital / Multi-branch</option>
+                                </select>
+                            </div>
+                            <div class="space-y-3">
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Specialization</label>
+                                <input type="text" placeholder="e.g. Cardiology" class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-6 py-5 text-slate-700 font-bold text-sm focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all">
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">How can we help you?</label>
+                            <textarea rows="4" placeholder="Tell us about your practice's needs..." class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-6 py-5 text-slate-700 font-bold text-sm focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all"></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-6 emerald-gradient text-white rounded-[2rem] font-black text-xs uppercase tracking-widest shadow-xl shadow-emerald-600/20 hover:scale-[1.02] transition-all">Schedule Demo Call</button>
+                    </form>
+
+                    <!-- Support Form -->
+                    <form x-show="tab === 'support'" x-cloak class="space-y-8 animate-in fade-in duration-500">
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div class="space-y-3">
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">User ID / Email</label>
+                                <input type="text" placeholder="your@email.com" class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-6 py-5 text-slate-700 font-bold text-sm focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all">
+                            </div>
+                            <div class="space-y-3">
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Issue Category</label>
+                                <select class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-6 py-5 text-slate-700 font-bold text-sm focus:bg-white focus:border-emerald-500 outline-none transition-all">
+                                    <option>Login / Access Issue</option>
+                                    <option>Clinical Data Query</option>
+                                    <option>Billing / Invoice Help</option>
+                                    <option>General Bug Report</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Describe the Issue</label>
+                            <textarea rows="6" placeholder="Please provide details about the problem..." class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-6 py-5 text-slate-700 font-bold text-sm focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all"></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-6 bg-slate-900 text-white rounded-[2rem] font-black text-xs uppercase tracking-widest shadow-xl shadow-slate-900/20 hover:scale-[1.02] transition-all">Submit Support Ticket</button>
+                    </form>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
     <!-- Footer -->
-    <footer class="bg-slate-900 pt-24 pb-12 text-slate-400">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-center md:items-start gap-12 mb-16 text-center md:text-left">
-                <div class="max-w-xs">
-                    <div class="flex items-center justify-center md:justify-start gap-2 text-2xl font-black tracking-tighter uppercase mb-6 text-white">
-                        <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white text-lg">+</div>
-                        MED<span class="text-primary">OS</span>
-                    </div>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">Elevating medical practices through intelligent digital infrastructure.</p>
-                </div>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-12 text-sm font-semibold uppercase tracking-widest text-slate-500">
-                    <div class="flex flex-col gap-4">
-                        <span class="text-white">Platform</span>
-                        <a href="index.php#features" class="hover:text-primary transition">Features</a>
-                        <a href="index.php#pricing" class="hover:text-primary transition">Pricing</a>
-                    </div>
-                    <div class="flex flex-col gap-4">
-                        <span class="text-white">Company</span>
-                        <a href="about.php" class="hover:text-primary transition">About Us</a>
-                        <a href="contact.php" class="text-primary transition">Contact</a>
-                    </div>
-                    <div class="flex flex-col gap-4">
-                        <span class="text-white">Legal</span>
-                        <a href="#" class="hover:text-primary transition">Privacy</a>
-                        <a href="#" class="hover:text-primary transition">Terms</a>
-                    </div>
-                </div>
-            </div>
-            <div class="pt-8 border-t border-slate-800 text-center flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-slate-500 text-xs font-bold uppercase tracking-widest">© <?php echo date('Y'); ?> MedOS SaaS Platform. All rights reserved.</p>
-            </div>
+    <footer class="bg-white border-t border-slate-100 pt-20 pb-10">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">© 2026 MedOS Clinical Systems. Built with ❤️ for Doctors.</p>
         </div>
     </footer>
 
+    <script>lucide.createIcons();</script>
 </body>
 </html>
