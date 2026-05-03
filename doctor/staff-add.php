@@ -9,7 +9,7 @@ $success = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $_POST['name'] ?? '';
     $email = $_POST['email'] ?? '';
-    $password = $_POST['password'] ?? 'staff123'; // Default password
+    $password = generate_random_password(); // Auto-generate secure password
     $role_name = $_POST['role_name'] ?? 'Receptionist';
     
     $clinic_id = $_SESSION['clinic_id'];
@@ -34,7 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $db->prepare("INSERT INTO users (clinic_id, role_id, name, email, password_hash) VALUES (?, ?, ?, ?, ?)");
             $stmt->execute([$clinic_id, $role_id, $name, $email, password_hash($password, PASSWORD_DEFAULT)]);
 
-            $success = "Member $name added successfully!";
+            // Send Credentials Email
+            send_credentials_email($email, $name, $password, $role_name);
+
+            $success = "Member $name added successfully! Credentials sent to email.";
         } catch (Exception $e) {
             $error = "Error adding member: " . $e->getMessage();
         }
@@ -95,10 +98,10 @@ require_once 'components/sidebar.php';
 
         <div class="bg-teal-50/50 p-6 rounded-2xl border border-teal-100/50">
             <div class="flex gap-3">
-                <i data-lucide="info" class="w-5 h-5 text-teal-600 shrink-0"></i>
+                <i data-lucide="shield-check" class="w-5 h-5 text-teal-600 shrink-0"></i>
                 <div>
-                    <h5 class="text-[10px] font-black text-teal-700 uppercase tracking-widest">Default Access</h5>
-                    <p class="text-xs text-teal-600/80 font-medium mt-1">The default password will be <code class="bg-teal-100/50 px-1.5 py-0.5 rounded font-black text-teal-700">staff123</code>. Staff members can change this later.</p>
+                    <h5 class="text-[10px] font-black text-teal-700 uppercase tracking-widest">Secure Access</h5>
+                    <p class="text-xs text-teal-600/80 font-medium mt-1">A secure, random password will be generated and sent to the team member's email address automatically.</p>
                 </div>
             </div>
         </div>

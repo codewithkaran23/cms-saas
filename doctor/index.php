@@ -134,18 +134,18 @@ require_once 'components/sidebar.php';
         </div>
 
         <!-- Card 3 -->
-        <div class="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-md transition-all group">
+        <a href="messages.php" class="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-md transition-all group">
             <div class="flex justify-between items-start mb-6">
-                <div class="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110 duration-300">
-                    <i data-lucide="users-2" class="w-7 h-7"></i>
+                <div class="w-14 h-14 bg-teal-600 text-white rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110 duration-300 shadow-lg shadow-teal-600/20">
+                    <i data-lucide="message-square" class="w-7 h-7"></i>
                 </div>
-                <div class="text-indigo-600 font-black text-[10px] uppercase tracking-widest mt-2">
-                    Doctors & Staff
+                <div class="text-teal-600 font-black text-[10px] uppercase tracking-widest mt-2">
+                    Open Hub
                 </div>
             </div>
-            <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest">Platform Users</p>
-            <h3 class="text-3xl font-black text-slate-900 mt-1"><?php echo number_format($doctor_count + 1); ?></h3>
-        </div>
+            <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest">Message Hub</p>
+            <h3 class="text-2xl font-black text-slate-900 mt-1">Chat with Patients</h3>
+        </a>
 
         <!-- Card 4 -->
         <div class="bg-slate-900 p-8 rounded-[2rem] shadow-xl shadow-slate-900/20 relative overflow-hidden group">

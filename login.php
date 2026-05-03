@@ -16,6 +16,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
 
     if (Auth::login($email, $password)) {
+        // Force password reset if flag is set
+        if (Auth::shouldReset()) {
+            redirect('change-password.php');
+        }
+
         // Successful login - role-based redirection
         if (Auth::hasRole('Doctor')) redirect('doctor/index.php');
         if (Auth::hasRole('Patient')) redirect('patient/index.php');

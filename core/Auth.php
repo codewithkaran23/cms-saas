@@ -18,6 +18,7 @@ class Auth {
             $_SESSION['user_name'] = $user['name'];
             $_SESSION['user_role'] = $user['role_name'];
             $_SESSION['clinic_id'] = $user['clinic_id'];
+            $_SESSION['require_reset'] = $user['require_reset']; // Store reset flag
             return true;
         }
         
@@ -32,10 +33,20 @@ class Auth {
         return isset($_SESSION['user_role']) && $_SESSION['user_role'] === $role;
     }
 
+    public static function shouldReset() {
+        return isset($_SESSION['require_reset']) && $_SESSION['require_reset'] == 1;
+    }
+
 
     public static function protect($role = null) {
         if (!self::check()) {
             redirect('login.php');
+            exit;
+        }
+
+        // Force password reset if required
+        if (self::shouldReset()) {
+            redirect('change-password.php');
             exit;
         }
         

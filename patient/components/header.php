@@ -64,6 +64,15 @@ if (!isset($page_title)) {
         }
     });
 
+    // FIX: Hide loader when navigating back/forward (Bfcache)
+    window.addEventListener('pageshow', function(event) {
+        const loader = document.getElementById('global-loader');
+        if (event.persisted && loader) {
+            loader.style.opacity = '0';
+            loader.style.display = 'none';
+        }
+    });
+
     // Show loader when clicking navigation links to smooth out transitions
     document.addEventListener('DOMContentLoaded', function() {
         const links = document.querySelectorAll('a[href]:not([href^="#"]):not([target="_blank"])');

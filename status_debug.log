@@ -1,0 +1,34 @@
+2026-05-02 11:54:15 | APT: 2 | NEW STATUS: confirmed | TRIGGER: Approve link clicked
+2026-05-02 11:54:17 | APT: 2 | NEW STATUS: in_progress | TRIGGER: Doctor entered session room
+2026-05-02 11:56:17 | APT: 2 | NEW STATUS: confirmed | TRIGGER: Approve link clicked
+2026-05-02 11:56:19 | REQ: /cms-saas/doctor/session.php?id=2 | GET: {"id":"2"} | POST: []
+2026-05-02 11:56:19 | APT: 2 | NEW STATUS: in_progress | TRIGGER: Doctor entered session room
+2026-05-02 11:56:27 | REQ: /cms-saas/doctor/session.php?id=2 | GET: {"id":"2"} | POST: {"save_notes":"1","session_notes":""}
+2026-05-02 11:59:49 | APT: 2 | NEW STATUS: confirmed | TRIGGER: Approve link clicked
+2026-05-02 11:59:51 | REQ: /cms-saas/doctor/session.php?id=2 | GET: {"id":"2"} | POST: []
+2026-05-02 11:59:51 | APT: 2 | NEW STATUS: in_progress | TRIGGER: Doctor entered session room
+2026-05-02 12:02:17 | REQ: /cms-saas/doctor/session.php?id=2 | GET: {"id":"2"} | POST: []
+2026-05-02 12:04:08 | REQ: /cms-saas/doctor/session.php?id=2 | GET: {"id":"2"} | POST: []
+2026-05-02 12:04:12 | REQ: /cms-saas/doctor/session.php?id=2 | GET: {"id":"2"} | POST: {"save_notes":"1","session_notes":""}
+2026-05-02 12:04:16 | REQ: /cms-saas/doctor/session.php?id=2 | GET: {"id":"2"} | POST: {"save_notes":"1","session_notes":""}
+2026-05-02 12:04:19 | REQ: /cms-saas/doctor/session.php?id=2 | GET: {"id":"2"} | POST: []
+2026-05-02 12:04:30 | REQ: /cms-saas/doctor/session.php?id=2 | GET: {"id":"2"} | POST: []
+2026-05-02 12:05:41 | REQ: /cms-saas/doctor/session.php?id=2 | GET: {"id":"2"} | POST: []
+2026-05-02 12:05:47 | REQ: /cms-saas/doctor/session.php?id=2 | GET: {"id":"2"} | POST: {"save_notes":"1","session_notes":""}
+2026-05-02 12:05:47 | REQ: /cms-saas/doctor/session.php?id=2 | GET: {"id":"2"} | POST: {"save_notes":"1","session_notes":""}
+2026-05-02 12:05:48 | REQ: /cms-saas/doctor/session.php?id=2 | GET: {"id":"2"} | POST: {"save_notes":"1","session_notes":""}
+2026-05-02 12:05:48 | REQ: /cms-saas/doctor/session.php?id=2 | GET: {"id":"2"} | POST: {"save_notes":"1","session_notes":""}
+2026-05-02 12:06:39 | REQ: /cms-saas/doctor/session.php?id=2 | GET: {"id":"2"} | POST: {"save_notes":"1","session_notes":""}
+2026-05-02 12:07:19 | APT: 12 | NEW STATUS: confirmed | TRIGGER: Approve link clicked
+2026-05-02 12:07:21 | REQ: /cms-saas/doctor/session.php?id=12 | GET: {"id":"12"} | POST: []
+2026-05-02 12:07:21 | APT: 12 | NEW STATUS: in_progress | TRIGGER: Doctor entered session room
+2026-05-02 12:07:26 | REQ: /cms-saas/doctor/session.php?id=12 | GET: {"id":"12"} | POST: []
+2026-05-02 12:08:31 | REQ: /cms-saas/doctor/session.php?id=12 | GET: {"id":"12"} | POST: []
+2026-05-02 12:08:53 | REQ: /cms-saas/doctor/session.php?id=12 | GET: {"id":"12"} | POST: {"save_notes":"1","session_notes":""}
+2026-05-02 12:08:53 | REQ: /cms-saas/doctor/session.php?id=12 | GET: {"id":"12"} | POST: {"save_notes":"1","session_notes":""}
+2026-05-02 12:09:48 | REQ: /cms-saas/doctor/session.php?id=12 | GET: {"id":"12"} | POST: {"save_notes":"1","session_notes":""}
+2026-05-02 12:09:49 | REQ: /cms-saas/doctor/session.php?id=12 | GET: {"id":"12"} | POST: {"complete":"1"}
+2026-05-02 12:09:49 | APT: 12 | NEW STATUS: completed | TRIGGER: POST complete button
+2026-05-02 12:09:53 | REQ: /cms-saas/doctor/session.php?id=2 | GET: {"id":"2"} | POST: []
+2026-05-02 12:09:54 | REQ: /cms-saas/doctor/session.php?id=2 | GET: {"id":"2"} | POST: {"complete":"1"}
+2026-05-02 12:09:54 | APT: 2 | NEW STATUS: completed | TRIGGER: POST complete button

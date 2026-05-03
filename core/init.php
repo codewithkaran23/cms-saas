@@ -16,7 +16,9 @@ define('ROOT_PATH', dirname(__DIR__));
 
 // 4. Auto-Include Core Files
 require_once ROOT_PATH . '/config/database.php';
+$mail_config = require_once ROOT_PATH . '/config/mail.php';
 require_once ROOT_PATH . '/core/Auth.php';
+require_once ROOT_PATH . '/core/Mailer.php';
 require_once ROOT_PATH . '/core/Functions.php';
 require_once ROOT_PATH . '/core/TenantManager.php';
 

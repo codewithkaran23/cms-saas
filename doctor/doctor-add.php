@@ -9,7 +9,7 @@ $success = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $_POST['name'] ?? '';
     $email = $_POST['email'] ?? '';
-    $password = $_POST['password'] ?? 'doctor123'; // Default password
+    $password = generate_random_password(); // Auto-generate secure password
     $specialization = $_POST['specialization'] ?? '';
     
     $clinic_id = $_SESSION['clinic_id'];
@@ -40,7 +40,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $profile_stmt->execute([$user_id, $clinic_id, $specialization]);
 
             $db->commit();
-            $success = "Doctor $name added successfully!";
+
+            // Send Credentials Email
+            send_credentials_email($email, $name, $password, 'Doctor');
+
+            $success = "Doctor $name added successfully! Credentials sent to email.";
         } catch (Exception $e) {
             $db->rollBack();
             $error = "Error adding doctor: " . $e->getMessage();
@@ -99,10 +103,10 @@ require_once 'components/sidebar.php';
 
         <div class="bg-teal-50/50 p-6 rounded-2xl border border-teal-100/50">
             <div class="flex gap-3">
-                <i data-lucide="info" class="w-5 h-5 text-teal-600 shrink-0"></i>
+                <i data-lucide="shield-check" class="w-5 h-5 text-teal-600 shrink-0"></i>
                 <div>
-                    <h5 class="text-[10px] font-black text-teal-700 uppercase tracking-widest">Automatic Credentialing</h5>
-                    <p class="text-xs text-teal-600/80 font-medium mt-1">The default password will be <code class="bg-teal-100/50 px-1.5 py-0.5 rounded font-black text-teal-700">doctor123</code>. The doctor will be prompted to change this upon their first login.</p>
+                    <h5 class="text-[10px] font-black text-teal-700 uppercase tracking-widest">Secure Registration</h5>
+                    <p class="text-xs text-teal-600/80 font-medium mt-1">A secure, random password will be generated and sent to the doctor's email address automatically.</p>
                 </div>
             </div>
         </div>

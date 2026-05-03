@@ -49,39 +49,6 @@ if (!isset($page_title)) {
 </head>
 <body class="bg-[#f8fafc] text-slate-800 font-sans antialiased selection:bg-primary selection:text-white">
 
-<!-- Global Page Loader -->
-<div id="global-loader" class="fixed inset-0 z-[9999] bg-[#f8fafc] flex items-center justify-center transition-opacity duration-300">
-    <div class="w-10 h-10 border-4 border-slate-200 border-t-primary rounded-full animate-spin"></div>
-</div>
-
-<script>
-    // Hide loader when page is fully loaded
-    window.addEventListener('load', function() {
-        const loader = document.getElementById('global-loader');
-        if (loader) {
-            loader.style.opacity = '0';
-            setTimeout(() => { loader.style.display = 'none'; }, 300);
-        }
-    });
-
-    // Show loader when clicking navigation links to smooth out transitions
-    document.addEventListener('DOMContentLoaded', function() {
-        const links = document.querySelectorAll('a[href]:not([href^="#"]):not([target="_blank"])');
-        links.forEach(link => {
-            link.addEventListener('click', function(e) {
-                // Ignore modifier clicks (new tab, etc)
-                if (e.ctrlKey || e.shiftKey || e.metaKey || e.button === 1) return;
-                
-                const loader = document.getElementById('global-loader');
-                if (loader) {
-                    loader.style.display = 'flex';
-                    // Force reflow for transition
-                    void loader.offsetWidth;
-                    loader.style.opacity = '1';
-                }
-            });
-        });
-    });
 </script>
 
 <div class="flex min-h-screen">
