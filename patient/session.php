@@ -74,7 +74,9 @@ require_once 'components/sidebar.php';
             ? testingChannel 
             : 'medos-session-' + this.aptId;
 
-        this.agora = new AgoraHandler(this.agoraAppId, channel, this.agoraToken, 2);
+        this.agora = new AgoraHandler(this.agoraAppId, channel, this.agoraToken, 2, () => {
+            this.callJoined = true;
+        });
         // Removed auto-join to satisfy autoplay policies
     },
 

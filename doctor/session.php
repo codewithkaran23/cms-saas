@@ -55,6 +55,7 @@ require_once 'components/sidebar.php';
     historyData: [],
     reportsData: [],
     agora: null,
+    callJoined: false,
     
     init() {
         this.fetchVisit();
@@ -94,7 +95,9 @@ require_once 'components/sidebar.php';
             ? testingChannel 
             : 'medos-session-' + this.aptId;
             
-        this.agora = new AgoraHandler(this.agoraAppId, channel, this.agoraToken, 1);
+        this.agora = new AgoraHandler(this.agoraAppId, channel, this.agoraToken, 1, () => {
+            this.callJoined = true;
+        });
         this.agora.join();
     },
 
@@ -262,7 +265,7 @@ require_once 'components/sidebar.php';
                         <!-- Remote Patient Video -->
                         <div id="remote-video" class="absolute inset-0 w-full h-full bg-slate-800">
                             <!-- Placeholder when patient is not yet connected -->
-                            <div class="placeholder-overlay absolute inset-0 flex flex-col items-center justify-center text-slate-500">
+                            <div x-show="!callJoined" class="placeholder-overlay absolute inset-0 flex flex-col items-center justify-center text-slate-500 z-10">
                                 <div class="w-20 h-20 bg-slate-700/50 rounded-full flex items-center justify-center mb-4 animate-pulse">
                                     <i data-lucide="user" class="w-10 h-10"></i>
                                 </div>
@@ -301,7 +304,7 @@ require_once 'components/sidebar.php';
                             </div>
                             <div class="flex gap-1">
                                 <button @click="agora.forceSync()" class="bg-blue-600 hover:bg-blue-700 text-white text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded shadow-lg">
-                                    Force Sync
+                                    Sync Video
                                 </button>
                                 <button @click="window.location.href='appointments.php'" class="bg-red-600 hover:bg-red-700 text-white text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded shadow-lg">
                                     Force Exit

@@ -1,13 +1,14 @@
 /**
  * MedOS Professional Agora RTC Handler
- * V6 - Production Grade (Proxy Removed & Existing User Sync)
+ * V10 - The "Google Meet" Edition (Smart Handshake)
  */
 class AgoraHandler {
-    constructor(appId, channelName, token = null, uid = null) {
+    constructor(appId, channelName, token = null, uid = null, onJoin = null) {
         this.appId = appId;
         this.channel = channelName;
         this.token = token;
         this.uid = uid;
+        this.onJoin = onJoin;
         this.client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
         this.localTracks = { videoTrack: null, audioTrack: null };
         this.remoteUsers = {};
@@ -15,10 +16,11 @@ class AgoraHandler {
         
         this.isJoining = false;
         this.isJoined = false;
+        this.discoveryInterval = null;
     }
 
     log(msg, isError = false) {
-        console.log(`Agora Debug: ${msg}`);
+        console.log(`Agora [${this.channel}]: ${msg}`);
         if(this.debugEl) {
             this.debugEl.innerText = msg;
             this.debugEl.style.color = isError ? "#f87171" : "#2dd4bf";
@@ -30,33 +32,34 @@ class AgoraHandler {
         this.isJoining = true;
         this.log(`Connecting...`);
 
-        if(!this.appId) {
-            this.isJoining = false;
-            return this.log("Missing App ID", true);
-        }
-
-        // Set up listeners
+        // Set up events
         this.client.on("user-published", (user, mediaType) => this.handleUserPublished(user, mediaType));
         this.client.on("user-left", (user) => {
-            this.log(`Peer ${user.uid} left`);
+            this.log(`Peer left`);
             delete this.remoteUsers[user.uid];
         });
 
         try {
             const tokenToUse = (this.token === '' || this.token === null) ? null : this.token;
-            const joinedUid = await this.client.join(this.appId, this.channel, tokenToUse, this.uid);
+            await this.client.join(this.appId, this.channel, tokenToUse, this.uid);
             
             this.isJoined = true;
             this.isJoining = false;
-            this.log(`Joined as UID ${joinedUid}`);
+            this.log(`Online`);
+
+            // --- THE SMART HANDSHAKE ---
+            // Poll for peers every 1 second until connected
+            this.discoveryInterval = setInterval(() => {
+                if(this.client.remoteUsers.length > 0) {
+                    this.client.remoteUsers.forEach(user => {
+                        if(!this.remoteUsers[user.uid]) {
+                            this.handleUserPublished(user, "video");
+                            this.handleUserPublished(user, "audio");
+                        }
+                    });
+                }
+            }, 1000);
             
-            // --- CRITICAL FIX: SUBSCRIBE TO USERS ALREADY IN THE ROOM ---
-            this.client.remoteUsers.forEach(user => {
-                if(user.hasVideo) this.handleUserPublished(user, "video");
-                if(user.hasAudio) this.handleUserPublished(user, "audio");
-            });
-            
-            // Create and publish local tracks
             try {
                 this.localTracks.audioTrack = await AgoraRTC.createMicrophoneAudioTrack();
                 this.localTracks.videoTrack = await AgoraRTC.createCameraVideoTrack({
@@ -65,60 +68,49 @@ class AgoraHandler {
                 
                 this.localTracks.videoTrack.play("local-video");
                 await this.client.publish(Object.values(this.localTracks));
-                this.log(`Live Room: ${this.channel}`);
             } catch (pError) {
-                this.log("Camera/Mic Blocked", true);
+                this.log("Camera Blocked", true);
             }
 
         } catch (error) {
             this.isJoining = false;
-            this.log("Join Error: " + error.message, true);
+            this.log("Connection Failed", true);
         }
     }
 
     async handleUserPublished(user, mediaType) {
-        this.log(`Peer ${user.uid} (${mediaType}) detected`);
-        
-        // Small delay to ensure browser is ready for the stream
-        setTimeout(async () => {
-            try {
-                await this.client.subscribe(user, mediaType);
-                this.log(`Subscribed to Peer ${user.uid}`);
-
-                if (mediaType === "video") {
-                    this.remoteUsers[user.uid] = user;
-                    // Auto-hide the "Waiting" screen
-                    document.querySelectorAll(".placeholder-overlay").forEach(el => el.style.display = "none");
-                    
-                    const remoteDiv = document.getElementById("remote-video");
-                    if(remoteDiv) {
-                        user.videoTrack.play("remote-video");
-                    }
+        try {
+            await this.client.subscribe(user, mediaType);
+            
+            if (mediaType === "video") {
+                this.remoteUsers[user.uid] = user;
+                // Instant UI Reveal
+                const remoteDiv = document.getElementById("remote-video");
+                if(remoteDiv) {
+                    user.videoTrack.play("remote-video");
+                    if(this.onJoin) this.onJoin(); // Hide placeholders immediately
                 }
-                if (mediaType === "audio") {
-                    user.audioTrack.play();
-                }
-            } catch (e) {
-                console.warn("Auto-subscribe failed, use Force Sync if needed.");
             }
-        }, 500);
+            if (mediaType === "audio") {
+                user.audioTrack.play();
+            }
+        } catch (e) {
+            // Silently retry via the Discovery Interval
+        }
     }
 
     async leave() {
+        if(this.discoveryInterval) clearInterval(this.discoveryInterval);
         this.isJoined = false;
         this.isJoining = false;
         for (let trackName in this.localTracks) {
             var track = this.localTracks[trackName];
-            if (track) {
-                track.stop();
-                track.close();
-            }
+            if (track) { track.stop(); track.close(); }
         }
         await this.client.leave();
     }
 
     async forceSync() {
-        this.log("Force Syncing...");
         this.client.remoteUsers.forEach(user => {
             this.handleUserPublished(user, "video");
             this.handleUserPublished(user, "audio");
