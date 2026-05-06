@@ -82,17 +82,54 @@ require_once 'core/init.php';
             <div class="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-teal-50 rounded-full blur-[120px] opacity-60 animate-pulse" style="animation-delay: 2s;"></div>
         </div>
 
-        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
-            <div class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/5 border border-emerald-500/10 rounded-full text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-8">
-                Our Story
+        <div class="max-w-5xl mx-auto px-6 text-center relative z-10">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-white border border-slate-100 rounded-full shadow-sm mb-12">
+                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                <span class="text-[10px] font-black text-slate-900 uppercase tracking-widest">Our Story</span>
             </div>
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 tracking-tightest mb-8 leading-[1.1]">
+            <h1 class="text-5xl md:text-6xl lg:text-7xl font-black text-slate-900 tracking-tightest mb-10 leading-[1.05]">
                 We're on a mission to <br>
-                <span class="text-gradient">modernize healthcare.</span>
+                <span class="text-emerald-600">modernize healthcare.</span>
             </h1>
-            <p class="text-lg md:text-xl text-slate-500 font-medium leading-relaxed max-w-2xl mx-auto">
+            <p class="text-lg md:text-xl text-slate-500 font-medium leading-relaxed max-w-2xl mx-auto mb-20">
                 MedOS was built with a single goal: to return the doctor's focus to the patient by eliminating the administrative static of legacy systems.
             </p>
+
+            <!-- Core Value Boxes -->
+            <div class="flex flex-wrap items-center justify-center gap-4">
+                <!-- Value 1 -->
+                <div class="flex items-center gap-4 px-6 py-4 bg-white border border-slate-100 rounded-2xl shadow-sm hover:shadow-md hover:border-emerald-100 transition-all group">
+                    <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-white transition-all duration-500 shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Our Focus</p>
+                        <p class="text-xs font-bold text-slate-900">Patient-First Care</p>
+                    </div>
+                </div>
+
+                <!-- Value 2 -->
+                <div class="flex items-center gap-4 px-6 py-4 bg-white border border-slate-100 rounded-2xl shadow-sm hover:shadow-md hover:border-emerald-100 transition-all group">
+                    <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-white transition-all duration-500 shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Our Drive</p>
+                        <p class="text-xs font-bold text-slate-900">Constant Innovation</p>
+                    </div>
+                </div>
+
+                <!-- Value 3 -->
+                <div class="flex items-center gap-4 px-6 py-4 bg-white border border-slate-100 rounded-2xl shadow-sm hover:shadow-md hover:border-emerald-100 transition-all group">
+                    <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-white transition-all duration-500 shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Our Promise</p>
+                        <p class="text-xs font-bold text-slate-900">Bank-Level Security</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -101,27 +138,15 @@ require_once 'core/init.php';
         <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-24 items-center">
             <!-- Visual Side -->
             <div class="relative group">
-                <div class="relative w-full aspect-square bg-slate-50 rounded-[3rem] overflow-hidden border border-slate-100 shadow-inner">
-                    <div class="absolute inset-0 flex items-center justify-center opacity-10">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-600"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    </div>
-                    
-                    <!-- Floating Stat Card -->
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-white rounded-[2.5rem] shadow-[0_40px_100px_rgba(0,0,0,0.08)] border border-slate-100 flex items-center justify-center p-12 transition-transform duration-700 group-hover:scale-105">
-                        <div class="text-center">
-                            <div class="w-20 h-20 bg-emerald-50 rounded-3xl flex items-center justify-center mx-auto mb-8 text-emerald-600 shadow-inner">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                            </div>
-                            <p class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Foundation</p>
-                            <p class="text-xl font-semibold text-slate-800 leading-relaxed italic">"Security isn't a feature; it's the foundation of everything we build."</p>
-                        </div>
-                    </div>
+                <!-- 3D Mission Workflow Image -->
+                <div class="relative w-full aspect-square rounded-[3rem] overflow-hidden">
+                    <img src="about.png" alt="MedOS Mission Workflow" class="w-full h-full object-contain mix-blend-multiply">
                 </div>
 
                 <!-- Accent Glow -->
-                <div class="absolute -bottom-12 -right-12 w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px] -z-10 animate-pulse"></div>
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-emerald-500/10 rounded-full blur-[120px] -z-10 "></div>
             </div>
-            
+
             <!-- Content Side -->
             <div class="space-y-12">
                 <div class="space-y-8">
